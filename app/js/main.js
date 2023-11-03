@@ -62,11 +62,13 @@ function getHTMLForClock(countdownClock) {
 function getHTMLForArtist(artist) {
   html = "";
   html += `<li data-id="${artist.id}">
+  <a href="#description">
   <h1>${artist.artist.name}</h1>
   <p>${artist.stage} | ${getStringForArtistDates(
     artist
   )} ${getStringForArtistTime(artist)}</p>
   <img src="${artist.artist.image}" alt="${artist.artist.name}">
+  </a>
   </li>`;
   return html;
 }
@@ -128,15 +130,18 @@ for (const $artist of $artists) {
     const artist = lineup.find((artist) => {
       return artist.id === id;
     });
-    $description.innerHTML = `<img src="${artist.artist.image}" alt="${
-      artist.artist.name
-    }">
-    <p>${artist.stage} | ${getStringForArtistDates(
+    let descHtml = "";
+    descHtml += `<img src="${artist.artist.image}" alt="${artist.artist.name}">`;
+    descHtml += `<p>${artist.stage} | ${getStringForArtistDates(
       artist
-    )} ${getStringForArtistTime(artist)}</p>
-    <h1>${artist.artist.name}</h1>
-    ${getHTMLForSocials(artist.artist.socials)}
-    <p>${artist.artist.description}</p>`;
+    )} ${getStringForArtistTime(artist)}</p>`;
+    descHtml += `<h1>${artist.artist.name}</h1>`;
+    if (artist.artist.socials) {
+      descHtml += getHTMLForSocials(artist.artist.socials);
+    }
+    descHtml += `<p>${artist.artist.description}</p>`;
+
+    $description.innerHTML = descHtml;
   });
 }
 
