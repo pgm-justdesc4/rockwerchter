@@ -48,6 +48,7 @@ header li a {
   justify-content: center;
   gap: 5rem;
   list-style: none;
+  padding: 0;
 }
 
 .lineup li a {
