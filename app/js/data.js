@@ -1,5 +1,9 @@
 const navigation = [
-  { name: "Line-up", type: "internal" },
+  {
+    name: "Line-up",
+    link: "#",
+    type: "internal",
+  },
   {
     name: "Official website",
     link: "https://rockwerchter.be",

@@ -1,18 +1,16 @@
 const $navigation = document.getElementById("nav");
 const $clock = document.getElementById("clock");
 const $lineup = document.getElementById("lineup");
+const $description = document.getElementById("description");
 
 // HEADER
 
 function getHTMLForNavigation(navigation) {
-  let html = "";
-  if (navigation.link) {
-    html += `
-        <li><a target=_blank href="${navigation.link}"</a>${navigation.name}</li>`;
-  } else
-    html += `
-    <li><a href="#"</a>${navigation.name}</li>`;
-  return html;
+  if (navigation.type === "external") {
+    return `<li><a target=_blank href="${navigation.link}"</a>${navigation.name}</li>`;
+  } else {
+    return `<li><a href="${navigation.link}"</a>${navigation.name}</li>`;
+  }
 }
 
 function getHTMLForNavigations(navigations) {
@@ -22,8 +20,6 @@ function getHTMLForNavigations(navigations) {
   }
   return temp;
 }
-
-$navigation.innerHTML = getHTMLForNavigations(navigation);
 
 // CLOCK
 
@@ -48,8 +44,6 @@ function countdownClock() {
 
   $clock.innerHTML = getHTMLForClock(countdownClock);
 }
-
-setInterval(countdownClock, 1000);
 
 function getHTMLForClock(countdownClock) {
   let html = "";
@@ -117,48 +111,54 @@ function getHTMLForArtists(artists) {
   return temp;
 }
 
-$lineup.innerHTML = getHTMLForArtists(lineup);
-
 // ARTISTS DESCRIPTION
 
-const $artists = document.querySelectorAll("#lineup li");
-const $description = document.getElementById("description");
+function registerListeners() {
+  const $artists = document.querySelectorAll("#lineup li");
+  for (const $artist of $artists) {
+    $artist.addEventListener("click", function (e) {
+      const id = e.currentTarget.dataset.id;
+      const artist = lineup.find((artist) => {
+        return artist.id === id;
+      });
+      let descHtml = "";
+      descHtml += `<img src="${artist.artist.image}" alt="${artist.artist.name}">`;
+      descHtml += `<p>${artist.stage} | ${getStringForArtistDates(
+        artist
+      )} ${getStringForArtistTime(artist)}</p>`;
+      descHtml += `<h1>${artist.artist.name}</h1>`;
+      if (artist.artist.socials) {
+        descHtml += getHTMLForSocials(artist.artist.socials);
+      }
+      descHtml += `<p>${artist.artist.description}</p>`;
 
-for (const $artist of $artists) {
-  $artist.addEventListener("click", function (e) {
-    const id = e.currentTarget.dataset.id;
-    const artist = lineup.find((artist) => {
-      return artist.id === id;
+      $description.innerHTML = descHtml;
     });
-    let descHtml = "";
-    descHtml += `<img src="${artist.artist.image}" alt="${artist.artist.name}">`;
-    descHtml += `<p>${artist.stage} | ${getStringForArtistDates(
-      artist
-    )} ${getStringForArtistTime(artist)}</p>`;
-    descHtml += `<h1>${artist.artist.name}</h1>`;
-    if (artist.artist.socials) {
-      descHtml += getHTMLForSocials(artist.artist.socials);
-    }
-    descHtml += `<p>${artist.artist.description}</p>`;
-
-    $description.innerHTML = descHtml;
-  });
+  }
 }
 
 function getHTMLForSocials(socials) {
-  let html = "";
-  if (socials.twitter) {
-    html += `<ul>
-    <li><a target=_blank href="${socials.instagram}">Instagram</a></li>
-    <li><a target=_blank href="${socials.twitter}">Twitter</a></li>
-    <li><a target=_blank href="${socials.spotify}">Spotify</a></li>
-    <li><a target=_blank href="${socials.youtube}">Youtube</a></li>
-    </ul>`;
-  } else
-    html += `<ul>
-  <li><a target=_blank href="${socials.instagram}">Instagram</a></li>
-  <li><a target=_blank href="${socials.spotify}">Spotify</a></li>
-  <li><a target=_blank href="${socials.youtube}">Youtube</a></li>
-  </ul>`;
+  let html = "<ul>";
+  for (const key in socials) {
+    if (socials[key]) {
+      html += `<li><a target="_blank" href="${socials[key]}">${key}</a></li>`;
+    }
+  }
+  html += "</ul>";
   return html;
 }
+
+function buildUI() {
+  $lineup.innerHTML = getHTMLForArtists(lineup);
+  $navigation.innerHTML = getHTMLForNavigations(navigation);
+  countdownClock();
+  setInterval(countdownClock, 1000);
+  registerListeners();
+}
+
+function initialize() {
+  buildUI();
+  registerListeners();
+}
+
+initialize();

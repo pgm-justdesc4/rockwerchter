@@ -36,6 +36,12 @@ header li a {
   margin-bottom: 2rem;
 }
 
+/* FOOTER */
+
+footer {
+  text-align: center;
+}
+
 /* LINE UP */
 
 .lineup {
