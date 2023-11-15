@@ -3,6 +3,13 @@ const $clock = document.getElementById("clock");
 const $lineup = document.getElementById("lineup");
 const $description = document.getElementById("description");
 
+function getPadStart(number) {
+  if (number < 10) {
+    number = "0" + number;
+  }
+  return number;
+}
+
 // HEADER
 
 function getHTMLForNavigation(navigation) {
@@ -40,7 +47,10 @@ function countdownClock() {
     (time % (1000 * secondsInHour)) / (1000 * secondsInMinute)
   );
   const seconds = Math.floor((time % (1000 * secondsInMinute)) / 1000);
-  const countdownClock = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+  const countdownClock = `${getPadStart(days)}d ${getPadStart(
+    hours
+  )}h ${getPadStart(minutes)}m ${getPadStart(seconds)}s`;
 
   $clock.innerHTML = getHTMLForClock(countdownClock);
 }
@@ -69,14 +79,9 @@ function getHTMLForArtist(artist) {
 
 function getStringForArtistDates(artist) {
   const date = new Date(artist.from);
-  let day = date.getDate();
-  if (day < 10) {
-    day = "0" + day;
-  }
-  let month = date.getMonth();
-  if (month < 10) {
-    month = "0" + month;
-  }
+
+  const day = getPadStart(date.getDate());
+  const month = getPadStart(date.getMonth());
 
   return `${day}/${month}`;
 }
@@ -84,22 +89,12 @@ function getStringForArtistDates(artist) {
 function getStringForArtistTime(artist) {
   const timeFrom = new Date(artist.from);
   const timeTo = new Date(artist.to);
-  let hourFrom = timeFrom.getHours();
-  if (hourFrom < 10) {
-    hourFrom = "0" + hourFrom;
-  }
-  let minutesFrom = timeFrom.getMinutes();
-  if (minutesFrom < 10) {
-    minutesFrom = "0" + minutesFrom;
-  }
-  let hourTo = timeTo.getHours();
-  if (hourTo < 10) {
-    hourTo = "0" + hourTo;
-  }
-  let minutesTo = timeTo.getMinutes();
-  if (minutesTo < 10) {
-    minutesTo = "0" + minutesTo;
-  }
+
+  const hourFrom = getPadStart(timeFrom.getHours());
+  const minutesFrom = getPadStart(timeFrom.getMinutes());
+  const hourTo = getPadStart(timeTo.getHours());
+  const minutesTo = getPadStart(timeTo.getMinutes());
+
   return `${hourFrom}.${minutesFrom}-${hourTo}.${minutesTo}`;
 }
 
@@ -121,16 +116,23 @@ function registerListeners() {
       const artist = lineup.find((artist) => {
         return artist.id === id;
       });
-      let descHtml = "";
+      $description.classList.remove("close");
+
+      let descHtml = `<div class="container">`;
+
       descHtml += `<img src="${artist.artist.image}" alt="${artist.artist.name}">`;
-      descHtml += `<p>${artist.stage} | ${getStringForArtistDates(
+      descHtml += `<div class='desc-text'><h2>${
+        artist.stage
+      } | ${getStringForArtistDates(artist)} ${getStringForArtistTime(
         artist
-      )} ${getStringForArtistTime(artist)}</p>`;
+      )}</h2>`;
       descHtml += `<h1>${artist.artist.name}</h1>`;
-      if (artist.artist.socials) {
-        descHtml += getHTMLForSocials(artist.artist.socials);
-      }
-      descHtml += `<p>${artist.artist.description}</p>`;
+      descHtml += getHTMLForSocials(artist.artist.socials);
+      descHtml += `<p>${artist.artist.description}</p></div>`;
+      descHtml += `<div class="close-button">
+      <p>
+      <a href='#' onclick='closeDescription(event)'>X</a></p></div>`;
+      descHtml += "</div>";
 
       $description.innerHTML = descHtml;
     });
@@ -141,12 +143,19 @@ function getHTMLForSocials(socials) {
   let html = "<ul>";
   for (const key in socials) {
     if (socials[key]) {
-      html += `<li><a target="_blank" href="${socials[key]}">${key}</a></li>`;
+      html += `<li><a target="_blank" href="${socials[key]}"><img src="images/${key}.svg" alt="${key}"></a></li>`;
     }
   }
   html += "</ul>";
   return html;
 }
+
+function closeDescription(event) {
+  event.preventDefault();
+  $description.classList.add("close");
+}
+
+// BUILD USER INTERFACE
 
 function buildUI() {
   $lineup.innerHTML = getHTMLForArtists(lineup);

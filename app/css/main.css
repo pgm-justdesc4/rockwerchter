@@ -3,11 +3,22 @@ body {
   color: white;
 }
 
+h1 {
+  font-family: "Anton", sans-serif;
+  font-size: 2rem;
+}
+
+p {
+  font-family: "PT Sans Narrow", sans-serif;
+  font-size: 1.2rem;
+}
+
 /* HEADER */
 
 header {
   display: flex;
   justify-content: space-between;
+  padding: 1rem;
 }
 
 header ul {
@@ -21,25 +32,28 @@ header li a {
   color: white;
 }
 
-/* CLOCK */
-
-.clock {
-  text-align: center;
-}
-
-.clock h2 {
-  font-size: 5rem;
-}
-
-.clock p {
-  margin-top: -5rem;
-  margin-bottom: 2rem;
-}
-
 /* FOOTER */
 
 footer {
   text-align: center;
+  margin: 1rem 0;
+}
+
+/* CLOCK */
+
+.clock {
+  text-align: center;
+  background-color: hsl(0, 0%, 11%);
+}
+
+.clock h2 {
+  font-family: "Lilita One", sans-serif;
+  font-size: clamp(2.85rem, var(--h2-fluid, 5cqi), 5rem);
+}
+
+.clock p {
+  margin-top: -1rem;
+  margin-bottom: 2rem;
 }
 
 /* LINE UP */
@@ -58,6 +72,8 @@ footer {
 }
 
 .lineup li a {
+  display: flex;
+  flex-direction: column-reverse;
   text-decoration: none;
   color: white;
   text-align: center;
@@ -65,4 +81,113 @@ footer {
 
 .lineup a img {
   width: 30rem;
+}
+
+.lineup li:hover {
+  background-color: hsl(0, 0%, 11%);
+  border-radius: 2rem;
+  transform: scale(1.1);
+}
+
+/* DESCRIPTION */
+
+@keyframes overlay {
+  0% {
+    transform: translateX(85%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.container {
+  width: 85vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  animation: overlay 1s;
+}
+
+.description {
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: black;
+  text-align: center;
+}
+
+.container img {
+  max-width: 60rem;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.description ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.description li {
+  list-style: none;
+}
+
+.desc-text {
+  max-width: 25rem;
+  width: 100%;
+}
+
+.desc-text h2 {
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.desc-text img {
+  width: 5rem;
+}
+
+.close {
+  display: none;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+}
+
+.close-button a {
+  font-family: "Anton", sans-serif;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: black;
+}
+
+.close-button:active {
+  font-size: 1.7rem;
+  transform: translateY(2px);
+}
+
+/* MEDIA QUERY */
+
+@media (max-width: 980px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 730px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+  header ul {
+    padding: 0;
+    margin-top: 0.5rem;
+  }
 }
