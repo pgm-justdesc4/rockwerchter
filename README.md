@@ -24,7 +24,7 @@ The Rock Werchter replica web page provides all the necessary information for fe
 - Node.js
 
 ## Project Links
-- [GitHub Repository]([https://github.com/your-username/rock-werchter-replica](https://github.com/pgm-justdesc4/rockwerchter)
+- [GitHub Repository](https://github.com/pgm-justdesc4/rockwerchter)
 
 ## Author
 Justin Descan
